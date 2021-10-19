@@ -9,4 +9,5 @@
     cd cleopatra-node
     npm init
     DEBUG=cleopatra:* npm start
-    
+
+And go to http://localhost:3000/

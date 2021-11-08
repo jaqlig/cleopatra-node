@@ -3,3 +3,9 @@ extends layout
 block content
   
   p Lista fryzjerów
+  dl
+    each hairdresser in hairdresser_list
+        dt
+            a(href=hairdresser.url) #{hairdresser.first_name + " " + hairdresser.last_name}
+        dd
+            p #{hairdresser.notes}

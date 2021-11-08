@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  div
+    p First name: #{hairdresser.first_name}
+    p Surname: #{hairdresser.last_name}
+    p Date of birth: #{hairdresser.birth}€
+    p Notes: #{hairdresser.notes}
+
+  div
+    a(href=hairdresser.url+'/update') Update details
+  div
+    a(href=hairdresser.url+'/delete') Remove this hairdresser from database

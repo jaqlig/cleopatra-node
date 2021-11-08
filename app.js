@@ -1,3 +1,4 @@
+require('dotenv').config()
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -13,10 +14,10 @@ var historyRouter = require('./routes/history');
 
 var app = express();
 
-// mysql setup
+// mongodb setup
 var mongoose = require('mongoose');
-var dev_db_url = 'DATABASE_LINK';
-var mongoDB = process.env.MONGODB_URI || 'DATABASE_LINK';
+var dev_db_url = process.env.MONGODB_URI;
+var mongoDB = process.env.MONGODB_URI || process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

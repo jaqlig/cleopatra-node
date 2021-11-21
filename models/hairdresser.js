@@ -13,7 +13,7 @@ var HairdresserSchema = new Schema(
 HairdresserSchema
 .virtual('url')
 .get(function () {
-    return '/hairdresser/' + this._id;
+    return '/hairdressers/' + this._id;
 });
 
 module.exports = mongoose.model('Hairdresser', HairdresserSchema);

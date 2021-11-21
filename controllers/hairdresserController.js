@@ -6,36 +6,31 @@ var async = require('async');
 // const { sanitizeBody } = require('express-validator/filter');
 
 // Display hairdresser details
-exports.detail = function (req, res) {
-    async.parallel({
-        hairdresser: function (callback) {
-            Hairdresser.findById(req.params.id)
-                .exec(callback)
-        }
-    }, function (err, results) {
-        if (err) { return next(err); }
-        if (results.hairdresser == null) {
+exports.detail = function (req, res, next) {
+    Hairdresser.findById(req.params.id).exec(function (err, details) {
+        if (err) return next(err); 
+        if (details == null) {
             var err = new Error('Hairdresser not found');
             err.status = 404;
             return next(err);
         }
-        res.render('hairdresser_detail', { hairdresser: results.hairdresser });
-    });
+        res.send({ hairdresser: details });
+        });       
 }
 
 // Display list of all hairdressers
 exports.list = function (req, res, next) {
     Hairdresser.find().exec(function (err, allItems) {
-            if (err) {
-                var err = new Error('Hairdresser not found');
-                err.status = 404;
-                return next(err);
-            }
-            if (allItems == null) {
-                var err = new Error('Not found');
-                err.status = 404;
-                return next(err);
-            }
-            res.render('hairdressers', { hairdresser_list: allItems });
-        });
+        if (err) {
+            var err = new Error('Hairdresser not found');
+            err.status = 404;
+            return next(err);
+        }
+        if (allItems == null) {
+            var err = new Error('Not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('hairdressers', { hairdresser_list: allItems });
+    });
 }

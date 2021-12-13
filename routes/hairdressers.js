@@ -3,7 +3,10 @@ var router = express.Router();
 
 var hairdresserController = require('../controllers/hairdresserController');
 
-// router.get('/create', hairdresserController.hairdresser_create_get);
+router.get('/', hairdresserController.list);
+router.get('/:id', hairdresserController.detail);
+
+router.get('/create', function(req, res, next) {res.render('new_hairdresser');});
 // router.post('/create', hairdresserController.hairdresser_create_post);
 
 // router.get('/:id/update', hairdresserController.hairdresser_update_get);
@@ -11,8 +14,5 @@ var hairdresserController = require('../controllers/hairdresserController');
 
 // router.get('/:id/delete', hairdresserController.hairdresser_delete_get);
 // router.post('/:id/delete', hairdresserController.hairdresser_delete_post);
-
-router.get('/', hairdresserController.list);
-router.get('/:id', hairdresserController.detail);
 
 module.exports = router;

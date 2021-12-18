@@ -1,6 +1,4 @@
-const { nextTick } = require('async');
 var Hairdresser = require('../models/hairdresser');
-var async = require('async');
 const validator = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
@@ -16,7 +14,7 @@ exports.detail = function (req, res, next) {
         }
         res.render('hairdresser_detail', { hairdresser: details });
         // res.send({ hairdresser: details });
-        });
+    });
 }
 
 // Display list of all hairdressers | GET
@@ -115,7 +113,7 @@ exports.create_post = [
     }
 ];
 
-// Display hairdresser update form | GET.
+// Display hairdresser update form | GET
 exports.update_get = function (req, res, next) {
     Hairdresser.findById(req.params.id).exec(function (err, details) {
         if (err) return next(err); 
@@ -129,7 +127,7 @@ exports.update_get = function (req, res, next) {
         });
 }
 
-// Handle hairdresser update | POST.
+// Handle hairdresser update | POST
 exports.update_post = [
 
     // Validate and sanitize fields.
@@ -184,3 +182,32 @@ exports.update_post = [
         }
     }
 ];
+
+// Display hairdresser delete form | GET (Debugging only, not need for React)
+exports.delete_get = function (req, res) {
+    Hairdresser.findById(req.params.id).exec(function (err, details) {
+        if (err) return next(err); 
+        if (details == null) {
+            var err = new Error('Hairdresser not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('delete_hairdresser', { hairdresser: details });
+    });
+};
+
+// Handle hairdresser delete | POST
+exports.delete_post = function (req, res) {
+    Hairdresser.findById(req.params.id).exec(function (err, details) {
+        if (err) return next(err); 
+        if (details == null) {
+            var err = new Error('Hairdresser not found');
+            err.status = 404;
+            return next(err);
+        }
+        Hairdresser.findByIdAndRemove(req.body.hairdresserid, function deleteItem(err) {
+            if (err) { return next(err); }
+            res.redirect('/')
+        })
+    });
+};

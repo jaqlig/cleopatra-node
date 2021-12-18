@@ -9,8 +9,8 @@ router.post('/create', hairdresserController.create_post);
 router.get('/:id/update', hairdresserController.update_get);
 router.post('/:id/update', hairdresserController.update_post);
 
-// router.get('/:id/delete', hairdresserController.hairdresser_delete_get);
-// router.post('/:id/delete', hairdresserController.hairdresser_delete_post);
+router.get('/:id/delete', hairdresserController.delete_get);
+router.post('/:id/delete', hairdresserController.delete_post);
 
 router.get('/', hairdresserController.list);
 router.get('/:id', hairdresserController.detail);

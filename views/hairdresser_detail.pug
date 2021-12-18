@@ -2,10 +2,13 @@ extends layout
 
 block content
   div
-    p First name: #{hairdresser.first_name}
-    p Surname: #{hairdresser.last_name}
-    p Date of birth: #{hairdresser.birth}€
-    p Notes: #{hairdresser.notes}
+    p Imię: #{hairdresser.first_name}
+    p Nazwisko: #{hairdresser.last_name}
+    p Telefon: #{hairdresser.phone_number}
+    p Email: #{hairdresser.email}
+    p Zatudniony od: #{hairdresser.employment_date}€
+    p Data urodzenia: #{hairdresser.birth}€
+    p Notatki: #{hairdresser.notes}
 
   div
     a(href=hairdresser.url+'/update') Update details

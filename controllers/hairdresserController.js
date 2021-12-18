@@ -32,8 +32,8 @@ exports.list = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        // res.send({ hairdresser_list: allItems });
         res.render('hairdressers', { hairdresser_list: allItems });
+        // res.send({ hairdresser_list: allItems });
     });
 }
 
@@ -41,22 +41,14 @@ exports.list = function (req, res, next) {
 // Create new hairdresser account
 exports.hairdresser_create_post = [
 
-    // Validate fields.
-    validator.body('first_name', 'first_name must not be empty.').trim().isLength({ min: 1 }),
-    validator.body('last_name', 'last_name must not be empty.').trim().isLength({ min: 1 }),
-    validator.body('birth', 'birth must not be empty.').trim().isLength({ min: 1 }),
-    validator.body('phone_number', 'phone_number must not be empty.').trim().isLength({ min: 9}),
-    validator.body('email', 'email must not be empty.').trim().isLength({ min: 5 }),
-    validator.body('password', 'password must not be empty.').exists().isLength({ min: 8}),
-    validator.body('passwordConfirmation').exists().custom((value, { req }) => value === req.body.password),
-
-    // Sanitize fields
-    validator.sanitizeBody('first_name').escape(),
-    validator.sanitizeBody('last_name').escape(),
-    validator.sanitizeBody('birth').escape(),
-    validator.sanitizeBody('phone_number').escape(),
-    validator.sanitizeBody('email').escape(),
-    validator.sanitizeBody('password').escape(),
+    // Validate and sanitize fields.
+    validator.body('first_name', 'first_name must not be empty.').not().isEmpty().trim().escape(),
+    validator.body('last_name', 'last_name must not be empty.').not().isEmpty().trim().escape(),
+    validator.body('birth', 'birth must not be empty.').not().isEmpty().trim().escape(),
+    validator.body('phone_number', 'Błędny numer telefonu.').not().isEmpty().trim().escape(),
+    validator.body('email', 'Błędny email.').isEmail().normalizeEmail(),
+    validator.body('password', 'Hasło musi mieć 8 znaków.').trim().isLength({ min: 8}).escape(),
+    validator.body('passwordConfirmation', 'Hasło w obu polach musi być takie samo.').exists().custom((value, { req }) => value === req.body.password),
 
     (req, res, next) => {
 
@@ -89,7 +81,7 @@ exports.hairdresser_create_post = [
                     else {
                         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
                             if (err) return next(err);
-
+                            let today = new Date();
                             const newHairdresser = new Hairdresser({
                                 first_name: req.body.first_name,
                                 last_name: req.body.last_name,
@@ -97,7 +89,7 @@ exports.hairdresser_create_post = [
                                 phone_number: req.body.phone_number,
                                 email: req.body.email,
                                 password: hashedPassword,
-                                // employment_date: today,
+                                employment_date: today,
                                 notes: ""
                             }).save(err => {
                                 if (err) return next(err);

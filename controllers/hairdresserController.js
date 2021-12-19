@@ -162,7 +162,6 @@ exports.update_post = [
         else {
             bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
                 if (err) return next(err);
-                let today = new Date();
                 const newHairdresser = new Hairdresser({
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
@@ -170,8 +169,7 @@ exports.update_post = [
                     phone_number: req.body.phone_number,
                     email: req.body.email,
                     password: hashedPassword,
-                    employment_date: today,
-                    notes: "",
+                    notes: req.body.notes,
                     _id: req.params.id
                 })
                 Hairdresser.findByIdAndUpdate(req.params.id, newHairdresser, {}, function (err, thehaidresser) {

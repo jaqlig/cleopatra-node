@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  
+  div
+    a(href="clients/create") #{"Utwórz nowe konto klienta"}
+
+  div
+    p Lista klientów
+    dl
+      each client in client_list
+          dt
+              a(href=client.url) #{client.first_name + " " + client.last_name}
+          dd
+              p #{client.notes}

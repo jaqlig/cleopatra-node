@@ -1,32 +1,32 @@
-extends layout
+extends ../layout
 
 block content
   h1 #{title}
 
   form(method='POST' action='')
     div.form-group
-      label(for='first_name') First name:
+      label(for='first_name') Imię:
       input#first_name.form-control(type='text' name='first_name' required='true' value=(undefined===hairdresser ? '' : hairdresser.first_name))
     div.form-group
-      label(for='last_name') Last name:
+      label(for='last_name') Nazwisko:
       input#last_name.form-control(type='text' name='last_name' required='true' value=(undefined===hairdresser ? '' : hairdresser.last_name))
     div.form-group
-      label(for='birth') Date of birth:
+      label(for='birth') Data urodzenia:
       input#birth.form-control(type='date' name='birth' required='true' value=(undefined===hairdresser ? '' : hairdresser.birth))
     div.form-group
-      label(for='phone_number') Phone number:
+      label(for='phone_number') Numer telefonu:
       input#phone_number.form-control(type='text' name='phone_number' required='true' value=(undefined===hairdresser ? '' : hairdresser.phone_number))
     div.form-group
       label(for='email') Email:
       input#email.form-control(type='email' name='email' required='true' value=(undefined===hairdresser ? '' : hairdresser.email))
     div.form-group
-      label(for='password') Password:
+      label(for='password') Hasło:
       input#password.form-control(type='password' name='password' required='true')
     div.form-group
-      label(for='passwordConfirmation') Confirm password:
+      label(for='passwordConfirmation') Potwierdź hasło:
       input#passwordConfirmation.form-control(type='password' name='passwordConfirmation' required='true')
 
-    button.btn.btn-primary(type='submit') Submit
+    button.btn.btn-primary(type='submit') Zapisz
 
   if errors 
    ul

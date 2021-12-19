@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
   div
@@ -11,6 +11,6 @@ block content
     p Notatki: #{hairdresser.notes}
 
   div
-    a(href=hairdresser.url+'/update') Update details
+    a(href=hairdresser.url+'/update') Edytuj dane
   div
-    a(href=hairdresser.url+'/delete') Remove this hairdresser from database
+    a(href=hairdresser.url+'/delete') Usuń tego fryzjera z bazy danych

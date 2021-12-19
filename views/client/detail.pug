@@ -1,0 +1,20 @@
+extends ../layout
+
+block content
+  div
+    p Imię: #{client.first_name}
+    p Nazwisko: #{client.last_name}
+    p Telefon: #{client.phone_number}
+    p Email: #{client.email}
+    p Płeć: #{client.gender}
+    p Długość włosów: #{client.hair_length}
+    p Rodzaj włosów: #{client.hair_type}
+    p Data rejestracji: #{client.registration_date}
+    p Ostatnia wizyta: #{client.last_visit}
+    p Punkty lojalnościowe: #{client.loyalty_points}
+    p Notatki: #{client.notes}
+
+  div
+    a(href=client.url+'/update') Edytuj dane
+  div
+    a(href=client.url+'/delete') Usuń tego klienta z bazy danych

@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  h2 Usuń: #{hairdresser.first_name} #{hairdresser.last_name}
+  p Czy na pewno chcesz usunąć tego fryzjera?
+    
+    form(method='POST' action='')
+      div.form-group
+        input#hairdresserid.form-control(type='hidden',name='hairdresserid', required='true', value=hairdresser._id )
+
+      button.btn.btn-primary(type='submit') Usuń

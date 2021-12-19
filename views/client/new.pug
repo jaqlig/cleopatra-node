@@ -1,0 +1,46 @@
+extends ../layout
+
+block content
+  h1 #{title}
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='first_name') Imię:
+      input#first_name.form-control(type='text' name='first_name' required='true' value=(undefined===client ? '' : client.first_name))
+    div.form-group
+      label(for='last_name') Nazwisko:
+      input#last_name.form-control(type='text' name='last_name' required='true' value=(undefined===client ? '' : client.last_name))
+    div.form-group
+      label(for='phone_number') Number telefonu:
+      input#phone_number.form-control(type='text' name='phone_number' required='true' value=(undefined===client ? '' : client.phone_number))
+    div.form-group
+      label(for='email') Email:
+      input#email.form-control(type='email' name='email' required='true' value=(undefined===client ? '' : client.email))
+    div.form-group   
+    label Płeć:
+    select(name='dropDown', for='gender') Płeć
+      each val in ['mężczyzna' , 'kobieta' , 'inny']
+          option(value=val) #{val}
+    div.form-group
+      label(for='hair_length') Długość włosów:
+      input#hair_length.form-control(type='text' name='hair_length' required='true' value=(undefined===client ? '' : client.hair_length))
+    div.form-group
+      label(for='hair_type') Rodzaj włosów:
+      input#hair_type.form-control(type='text' name='hair_type' required='true' value=(undefined===client ? '' : client.hair_type))
+    div.form-group
+      label(for='registration_date') Data rejestracji:
+      input#registration_date.form-control(type='date' name='registration_date' required='true' value=(undefined===client ? '' : client.registration_date))
+    div.form-group
+      label(for='loyalty_points') Punkty lojalnościowe:
+      input#loyalty_points.form-control(type='number' name='loyalty_points' required='true' value=(undefined===client ? '' : client.loyalty_points))
+    div.form-group
+      label(for='notes') Notatki:
+      textarea#notes.form-control(type='textarea' name='notes' rows='3') #{undefined===item ? '' : client.notes}
+
+
+    button.btn.btn-primary(type='submit') Zapisz
+
+  if errors 
+   ul
+    for error in errors
+     li!= error.msg

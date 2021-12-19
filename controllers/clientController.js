@@ -1,27 +1,27 @@
-var Hairdresser = require('../models/hairdresser');
+var Client = require('../models/client');
 const validator = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
-// Display hairdresser details | GET
+// Display client details | GET
 exports.detail = function (req, res, next) {
-    Hairdresser.findById(req.params.id).exec(function (err, details) {
+    Client.findById(req.params.id).exec(function (err, details) {
         if (err) return next(err); 
         if (details == null) {
-            var err = new Error('Hairdresser not found');
+            var err = new Error('Client not found');
             err.status = 404;
             return next(err);
         }
-        res.render('hairdresser/detail', { hairdresser: details });
-        // res.send({ hairdresser: details });
+        res.render('client/detail', { client: details });
+        // res.send({ client: details });
     });
 }
 
-// Display list of all hairdressers | GET
+// Display list of all clients | GET
 exports.list = function (req, res, next) {
-    Hairdresser.find().exec(function (err, allItems) {
+    Client.find().exec(function (err, allItems) {
         if (err) {
-            var err = new Error('Hairdresser not found');
+            var err = new Error('Client not found');
             err.status = 404;
             return next(err);
         }
@@ -30,23 +30,20 @@ exports.list = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('hairdresser/list', { hairdresser_list: allItems });
-        // res.send({ hairdresser_list: allItems });
+        res.render('client/list', { client_list: allItems });
+        // res.send({ client_list: allItems });
     });
 }
 
 
-// Create new hairdresser account | POST
+// Create new client account | POST
 exports.create_post = [
 
     // Validate and sanitize fields.
     validator.body('first_name', 'first_name must not be empty.').not().isEmpty().trim().escape(),
     validator.body('last_name', 'last_name must not be empty.').not().isEmpty().trim().escape(),
-    validator.body('birth', 'birth must not be empty.').not().isEmpty().trim().escape(),
     validator.body('phone_number', 'Błędny numer telefonu.').not().isEmpty().trim().escape(),
     validator.body('email', 'Błędny email.').isEmail().normalizeEmail(),
-    validator.body('password', 'Hasło musi mieć 8 znaków.').trim().isLength({ min: 8}).escape(),
-    validator.body('passwordConfirmation', 'Hasło w obu polach musi być takie samo.').exists().custom((value, { req }) => value === req.body.password),
 
     (req, res, next) => {
 

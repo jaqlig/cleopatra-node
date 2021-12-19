@@ -3,7 +3,7 @@ var router = express.Router();
 
 var hairdresserController = require('../controllers/hairdresserController');
 
-router.get('/create', function(req, res, next) {res.render('new_hairdresser');});
+router.get('/create', function(req, res, next) {res.render('hairdresser/new');});
 router.post('/create', hairdresserController.create_post);
 
 router.get('/:id/update', hairdresserController.update_get);

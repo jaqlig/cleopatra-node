@@ -2,6 +2,7 @@ var Visit = require('../models/visit');
 var Service = require('../models/service');
 var Hairdresser = require('../models/hairdresser');
 var Client = require('../models/client');
+var Mail = require('./emailNotifier');
 const validator = require('express-validator');
 const passport = require('passport');
 const async = require('async');
@@ -65,7 +66,7 @@ exports.create_post = [
     validator.body('service', 'Błędna usługa.').not().isEmpty().trim().escape(),
     validator.body('hairdresser', 'Błędny fryzjer.').not().isEmpty().trim().escape(),
     validator.body('client', 'Błędny klient.').not().isEmpty().trim().escape(),
-    validator.body('notes', 'Błąd w notatkach.').not().isEmpty().trim().escape(),
+    validator.body('notes', 'Błąd w notatkach.').trim().escape(),
 
     (req, res, next) => {
 
@@ -109,7 +110,7 @@ exports.create_post = [
                     return;
                 }
 
-                // Save to db
+                // Save to db and send notification
                 else {
                     const newVisit = new Visit({
                         when: req.body.when,
@@ -117,11 +118,32 @@ exports.create_post = [
                         hairdresser: req.body.hairdresser,
                         client: req.body.client,
                         notes: req.body.notes,
-                    }).save(err => {
-                        if (err) return next(err);
-                        res.render('index', { msg: "Nowa wizyta dodana." });
+                    });
+
+
+                    async.parallel({
+                        hairdresser: function (callback) {
+                            Hairdresser.findById(req.body.hairdresser, callback);
+                        },
+                        service: function (callback) {
+                            Service.findById(req.body.service, callback);
+                        },
+                        client: function (callback) {
+                            Client.findById(req.body.client, callback);
+                        },
+                    }, function (err, results) {
+                        if (err) { return next(err); }
+                        let message = 
+                        'Data: ' + req.body.when + '\n' + 
+                        'Usługa: ' + results.service.name + '\n' + 
+                        'Fryzjer: ' + results.hairdresser.first_name + ' ' + results.hairdresser.last_name + '\n' + 
+                        'Dodatkowe informacje: ' + req.body.notes;
+                        Mail.sendNotification(results.client.email, message);
                     });
                     
+                    newVisit.save(err => {if (err) return next(err);
+                        res.render('index', { msg: "Nowa wizyta dodana." });
+                    });                    
                 }
             });
     }
@@ -136,9 +158,35 @@ exports.update_get = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('visit/new', { visit: details });
+        res.render('visit/new', { visit: details, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
         // res.send({ visit: details });
         });
+}
+
+exports.update_get = function (req, res, next) {
+    async.parallel({
+        visit: function (callback) {
+            Visit.findById(req.params.id, callback);
+        },
+        hairdressers: function (callback) {
+            Hairdresser.find(callback);
+        },
+        services: function (callback) {
+            Service.find(callback);
+        },
+        clients: function (callback) {
+            Client.find(callback);
+        },
+    }, function (err, details) {
+        if (err) { return next(err); }
+        if (details == null) {
+            var err = new Error('Visit not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('visit/new', { visit: details.visit, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
+        // res.send({ visit: details.visit, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
+    });
 }
 
 // Handle visit update | POST
@@ -196,6 +244,27 @@ exports.update_post = [
                 notes: req.body.notes,
                 _id: req.params.id
             })
+
+            async.parallel({
+                hairdresser: function (callback) {
+                    Hairdresser.findById(req.body.hairdresser, callback);
+                },
+                service: function (callback) {
+                    Service.findById(req.body.service, callback);
+                },
+                client: function (callback) {
+                    Client.findById(req.body.client, callback);
+                },
+            }, function (err, results) {
+                if (err) { return next(err); }
+                let message = 
+                'Data: ' + req.body.when + '\n' + 
+                'Usługa: ' + results.service.name + '\n' + 
+                'Fryzjer: ' + results.hairdresser.first_name + ' ' + results.hairdresser.last_name + '\n' + 
+                'Dodatkowe informacje: ' + req.body.notes;
+                Mail.sendNotification(results.client.email, message);
+            });
+
             Visit.findByIdAndUpdate(req.params.id, newVisit, {}, function (err, visit) {
                 if (err) { return next(err); }
                 res.redirect(visit.url);

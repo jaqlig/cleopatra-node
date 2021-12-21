@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  
+  div
+    a(href="services/create") #{"Utwórz nowy rodzaj usługi"}
+
+  div
+    p Lista usług
+    dl
+      each service in service_list
+          dt
+              a(href=service.url) #{service.name}
+          dd
+              p #{service.next_visit}

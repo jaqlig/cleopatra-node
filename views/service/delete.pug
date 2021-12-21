@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  h2 Usuń: #{service.name}
+  p Czy na pewno chcesz usunąć tę usługę?
+    
+    form(method='POST' action='')
+      div.form-group
+        input#serviceid.form-control(type='hidden',name='serviceid', required='true', value=service._id )
+
+      button.btn.btn-primary(type='submit') Usuń

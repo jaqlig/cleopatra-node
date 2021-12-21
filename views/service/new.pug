@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h1 #{title}
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='name') Nazwa usługi:
+      input#name.form-control(type='text' name='name' required='true' value=(undefined===client ? '' : client.name))
+    div.form-group   
+    label(for='gender') Płeć:
+    select(name='gender' id='gender')
+      each val in ['mężczyzna' , 'kobieta']
+          option(value=val) #{val}
+    div.form-group
+      label(for='approx_time') Czas [min]:
+      input#approx_time.form-control(type='text' name='approx_time' required='true' value=(undefined===client ? '' : client.approx_time))
+    div.form-group
+      label(for='price') Cena [zł]:
+      input#price.form-control(type='text' name='price' required='true' value=(undefined===client ? '' : client.price))
+
+
+    button.btn.btn-primary(type='submit') Zapisz
+
+  if errors 
+    p #{errMsg}
+    ul
+    for error in errors
+      li!= error.msg

@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+  h1 #{title}
+
+  form(method='POST' action='')
+    div.form-group
+    label(for='when') Termin:
+      input#when.form-control(type='datetime-local' name='when' required='true' value=(undefined===visit ? '' : visit.when))
+    div.form-group   
+    label(for='hairdresser') Fryzjer:
+    select(name='hairdresser' id='hairdresser')
+      for hairdresser in hairdressers
+          option(value=hairdresser._id) #{hairdresser.first_name + ' ' + hairdresser.last_name}
+    div.form-group   
+    label(for='service') Usługa:
+    select(name='service' id='service')
+      for service in services
+          option(value=service._id) #{service.name}
+    div.form-group   
+    label(for='client') Klient:
+    select(name='client' id='client')
+      for client in clients
+          option(value=client._id) #{client.first_name + ' ' + client.last_name + ' - ' + client.email}
+    div.form-group
+      label(for='notes') Notatki:
+      textarea#notes.form-control(type='textarea' name='notes' rows='3') #{undefined===visit ? '' : visit.notes}
+
+
+    button.btn.btn-primary(type='submit') Zapisz
+
+  if errors 
+    p #{errMsg}
+    ul
+    for error in errors
+      li!= error.msg

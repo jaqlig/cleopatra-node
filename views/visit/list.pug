@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  
+  div
+    a(href="visits/create") #{"Dodaj nową wizytę"}
+
+  div
+    p Lista wizyt
+    dl
+      each visit in visit_list
+          dt
+              a(href=visit.url) #{visit.when}
+          dd
+              p #{visit.hairdresser}

@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  h2 Usuń: #{visit.date + '' + visit.hairdresser}
+  p Czy na pewno chcesz usunąć tę usługę?
+    
+    form(method='POST' action='')
+      div.form-group
+        input#visitid.form-control(type='hidden',name='visitid', required='true', value=visit._id )
+
+      button.btn.btn-primary(type='submit') Usuń

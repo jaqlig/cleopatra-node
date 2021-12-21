@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  div
+    p Kiedy: #{visit.when}
+    p Fryzjer: #{visit.hairdresser}
+    p Usługa: #{visit.service}
+    p Klient: #{visit.client}
+    p Notatki: #{visit.notes}
+
+  div
+    a(href=visit.url+'/update') Edytuj dane
+  div
+    a(href=visit.url+'/delete') Usuń tę wizytę

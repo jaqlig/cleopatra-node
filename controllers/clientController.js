@@ -1,5 +1,6 @@
 var Client = require('../models/client');
 const validator = require('express-validator');
+const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
 // Display client details | GET
@@ -43,6 +44,8 @@ exports.create_post = [
     validator.body('last_name', 'Błąd w nazwisku.').not().isEmpty().trim().escape(),
     validator.body('phone_number', 'Błędny numer telefonu.').not().isEmpty().trim().escape(),
     validator.body('email', 'Błędny email.').isEmail().normalizeEmail(),
+    validator.body('password', 'Hasło musi mieć 8 znaków.').trim().isLength({ min: 8}).escape(),
+    validator.body('passwordConfirmation', 'Hasło w obu polach musi być takie samo.').exists().custom((value, { req }) => value === req.body.password),
     validator.body('gender').not().isEmpty().trim().escape(),
     validator.body('hair_length', 'Błąd w długości włosów.').trim().escape(),
     validator.body('hair_type', 'Błąd w rodzaju włosów.').trim().escape(),
@@ -82,23 +85,26 @@ exports.create_post = [
 
                     // Save to db
                     else {
-                        let today = new Date().toLocaleString();
-                        const newClient = new Client({
-                            first_name: req.body.first_name,
-                            last_name: req.body.last_name,
-                            phone_number: req.body.phone_number,
-                            email: req.body.email,
-                            gender: req.body.gender,
-                            hair_length: req.body.hair_length,
-                            hair_type: req.body.hair_type,
-                            registration_date: today,
-                            loyalty_points: req.body.loyalty_points,
-                            notes: req.body.notes,
-                        }).save(err => {
+                        bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
                             if (err) return next(err);
-                            res.render('index', { msg: "Nowy klient dodany." });
+                            let today = new Date().toLocaleString();
+                            const newClient = new Client({
+                                first_name: req.body.first_name,
+                                last_name: req.body.last_name,
+                                phone_number: req.body.phone_number,
+                                email: req.body.email,
+                                password: hashedPassword,
+                                gender: req.body.gender,
+                                hair_length: req.body.hair_length,
+                                hair_type: req.body.hair_type,
+                                registration_date: today,
+                                loyalty_points: req.body.loyalty_points,
+                                notes: req.body.notes,
+                            }).save(err => {
+                                if (err) return next(err);
+                                res.render('index', { msg: "Nowy klient dodany." });
+                            });
                         });
-                        
                     }
 
                 }
@@ -144,6 +150,8 @@ exports.update_post = [
     validator.body('last_name', 'Błąd w nazwisku.').not().isEmpty().trim().escape(),
     validator.body('phone_number', 'Błędny numer telefonu.').not().isEmpty().trim().escape(),
     validator.body('email', 'Błędny email.').isEmail().normalizeEmail(),
+    validator.body('password', 'Hasło musi mieć 8 znaków.').trim().isLength({ min: 8}).escape(),
+    validator.body('passwordConfirmation', 'Hasło w obu polach musi być takie samo.').exists().custom((value, { req }) => value === req.body.password),
     validator.body('gender').not().isEmpty().trim().escape(),
     validator.body('hair_length', 'Błąd w długości włosów.').trim().escape(),
     validator.body('hair_type', 'Błąd w rodzaju włosów.').trim().escape(),
@@ -175,21 +183,24 @@ exports.update_post = [
 
         // Update in db
         else {
-            const newClient = new Client({
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-                phone_number: req.body.phone_number,
-                email: req.body.email,
-                gender: req.body.gender,
-                hair_length: req.body.hair_length,
-                hair_type: req.body.hair_type,
-                loyalty_points: req.body.loyalty_points,
-                notes: req.body.notes,
-                _id: req.params.id
-            })
-            Client.findByIdAndUpdate(req.params.id, newClient, {}, function (err, theclient) {
-                if (err) { return next(err); }
-                res.redirect(theclient.url);
+            bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+                if (err) return next(err);
+                const newClient = new Client({
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    phone_number: req.body.phone_number,
+                    email: req.body.email,
+                    gender: req.body.gender,
+                    hair_length: req.body.hair_length,
+                    hair_type: req.body.hair_type,
+                    loyalty_points: req.body.loyalty_points,
+                    notes: req.body.notes,
+                    _id: req.params.id
+                })
+                Client.findByIdAndUpdate(req.params.id, newClient, {}, function (err, theclient) {
+                    if (err) { return next(err); }
+                    res.redirect(theclient.url);
+                });
             });
         }
     }

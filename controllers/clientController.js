@@ -190,6 +190,7 @@ exports.update_post = [
                     last_name: req.body.last_name,
                     phone_number: req.body.phone_number,
                     email: req.body.email,
+                    password: {type: String, required: true},
                     gender: req.body.gender,
                     hair_length: req.body.hair_length,
                     hair_type: req.body.hair_type,

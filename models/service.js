@@ -7,6 +7,7 @@ var ServiceSchema = new Schema(
     gender: {type: String, enum : ['mężczyzna','kobieta'], required: true},
     approx_time: {type: Number, required: true},
     price: {type: Number, required: true},
+    notes: {type: String}
   }
 );
 

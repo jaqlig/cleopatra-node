@@ -82,7 +82,7 @@ exports.create_post = [
 
                     // Save to db
                     else {
-                        let today = new Date();
+                        let today = new Date().toLocaleString();
                         const newClient = new Client({
                             first_name: req.body.first_name,
                             last_name: req.body.last_name,

@@ -10,7 +10,7 @@ var ClientSchema = new Schema(
     gender: {type: String, enum : ['mężczyzna','kobieta', 'inna']},
     hair_length: {type: String, minlength: 1, maxlength: 100},
     hair_type: {type: String, minlength: 1, maxlength: 100},
-    registration_date: {type: Date},
+    registration_date: {type: String},
     loyalty_points: {type: Number, default: 0},
     notes: {type: String}
   }

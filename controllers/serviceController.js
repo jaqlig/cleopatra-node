@@ -43,6 +43,7 @@ exports.create_post = [
     validator.body('gender', 'Błąd w wybranej płci.').not().isEmpty().trim().escape(),
     validator.body('approx_time', 'Błędny czas.').not().isEmpty().trim().escape(),
     validator.body('price', 'Błędna cena.').not().isEmpty().trim().escape(),
+    validator.body('notes', 'Błąd w notatkach.').trim().escape(),
 
     (req, res, next) => {
 
@@ -64,6 +65,7 @@ exports.create_post = [
                             gender: req.body.gender,
                             approx_time: req.body.approx_time,
                             price: req.body.price,
+                            notes: req.body.notes,
                             errMsg: 'Popraw podane dane.',
                             errors: errors.array()
                         });
@@ -77,6 +79,7 @@ exports.create_post = [
                             gender: req.body.gender,
                             approx_time: req.body.approx_time,
                             price: req.body.price,
+                            notes: req.body.notes,
                         }).save(err => {
                             if (err) return next(err);
                             res.render('index', { msg: "Nowa usługa dodana." });
@@ -122,6 +125,7 @@ exports.update_post = [
     validator.body('gender', 'Błąd w wybranej płci.').not().isEmpty().trim().escape(),
     validator.body('approx_time', 'Błędny czas.').not().isEmpty().trim().escape(),
     validator.body('price', 'Błędna cena.').not().isEmpty().trim().escape(),
+    validator.body('notes', 'Błąd w notatkach.').not().isEmpty().trim().escape(),
 
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -135,6 +139,7 @@ exports.update_post = [
                 gender: req.body.gender,
                 approx_time: req.body.approx_time,
                 price: req.body.price,
+                notes: req.body.notes,
                 errMsg: 'Popraw podane dane.',
                 errors: errors.array()
             });
@@ -148,6 +153,7 @@ exports.update_post = [
                 gender: req.body.gender,
                 approx_time: req.body.approx_time,
                 price: req.body.price,
+                notes: req.body.notes,
                 _id: req.params.id
             })
             Service.findByIdAndUpdate(req.params.id, newService, {}, function (err, service) {

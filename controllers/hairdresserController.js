@@ -47,6 +47,7 @@ exports.create_post = [
     validator.body('email', 'Błędny email.').isEmail().normalizeEmail(),
     validator.body('password', 'Hasło musi mieć 8 znaków.').trim().isLength({ min: 8}).escape(),
     validator.body('passwordConfirmation', 'Hasło w obu polach musi być takie samo.').exists().custom((value, { req }) => value === req.body.password),
+    validator.body('notes', 'Błąd w notatkach.').not().isEmpty().trim().escape(),
 
     (req, res, next) => {
 
@@ -69,6 +70,7 @@ exports.create_post = [
                             birth: req.body.birth,
                             phone_number: req.body.phone_number,
                             email: req.body.email,
+                            notes: req.body.notes,
                             errMsg: 'Popraw podane dane.',
                             errors: errors.array()
                         });
@@ -79,7 +81,7 @@ exports.create_post = [
                     else {
                         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
                             if (err) return next(err);
-                            let today = new Date();
+                            let today = new Date().toLocaleString();
                             const newHairdresser = new Hairdresser({
                                 first_name: req.body.first_name,
                                 last_name: req.body.last_name,
@@ -88,7 +90,7 @@ exports.create_post = [
                                 email: req.body.email,
                                 password: hashedPassword,
                                 employment_date: today,
-                                notes: ""
+                                notes: req.body.notes,
                             }).save(err => {
                                 if (err) return next(err);
                                 res.render('index', { msg: "Konto utworzone poprawnie, możesz się zalogować." });
@@ -98,7 +100,7 @@ exports.create_post = [
 
                 }
                 else {
-                    res.render('new_hairdresser', {
+                    res.render('hairdresser/new', {
                         first_name: req.body.first_name,
                         last_name: req.body.last_name,
                         birth: req.body.birth,
@@ -138,6 +140,7 @@ exports.update_post = [
     validator.body('email', 'Błędny email.').isEmail().normalizeEmail(),
     validator.body('password', 'Hasło musi mieć 8 znaków.').trim().isLength({ min: 8}).escape(),
     validator.body('passwordConfirmation', 'Hasło w obu polach musi być takie samo.').exists().custom((value, { req }) => value === req.body.password),
+    validator.body('notes', 'Błąd w notatkach.').not().isEmpty().trim().escape(),
 
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -152,6 +155,7 @@ exports.update_post = [
                 birth: req.body.birth,
                 phone_number: req.body.phone_number,
                 email: req.body.email,
+                notes: req.body.notes,
                 errMsg: 'Popraw podane dane.',
                 errors: errors.array()
             });

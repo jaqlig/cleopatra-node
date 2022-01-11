@@ -11,8 +11,8 @@ exports.detail = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('service/detail', { service: details });
-        // res.send({ service: details });
+        // res.render('service/detail', { service: details });
+        res.send({ service: details });
     });
 }
 
@@ -29,8 +29,8 @@ exports.list = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('service/list', { service_list: allItems });
-        // res.send({ service_list: allItems });
+        // res.render('service/list', { service_list: allItems });
+        res.send({ service_list: allItems });
     });
 }
 
@@ -60,7 +60,7 @@ exports.create_post = [
 
                     // Reload with data if error
                     if (!errors.isEmpty()) {
-                        res.render('service/new', {
+                        res.send({
                             name: req.body.name,
                             gender: req.body.gender,
                             approx_time: req.body.approx_time,
@@ -82,14 +82,14 @@ exports.create_post = [
                             notes: req.body.notes,
                         }).save(err => {
                             if (err) return next(err);
-                            res.render('index', { msg: "Nowa usługa dodana." });
+                            res.send({ msg: "Nowa usługa dodana." });
                         });
                         
                     }
 
                 }
                 else {
-                    res.render('service/new', {
+                    res.send({
                         name: req.body.name,
                         gender: req.body.gender,
                         approx_time: req.body.approx_time,
@@ -112,8 +112,8 @@ exports.update_get = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('service/new', { service: details });
-        // res.send({ service: details });
+        // res.render('service/new', { service: details });
+        res.send({ service: details });
         });
 }
 
@@ -134,7 +134,7 @@ exports.update_post = [
 
         // Reload with data if error
         if (!errors.isEmpty()) {
-            res.render('service', {
+            res.send({
                 name: req.body.name,
                 gender: req.body.gender,
                 approx_time: req.body.approx_time,

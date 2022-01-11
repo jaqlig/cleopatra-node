@@ -12,8 +12,8 @@ exports.detail = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('client/detail', { client: details });
-        // res.send({ client: details });
+        // res.render('client/detail', { client: details });
+        res.send({ client: details });
     });
 }
 
@@ -30,8 +30,8 @@ exports.list = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('client/list', { client_list: allItems });
-        // res.send({ client_list: allItems });
+        // res.render('client/list', { client_list: allItems });
+        res.send({ client_list: allItems });
     });
 }
 
@@ -67,7 +67,7 @@ exports.create_post = [
 
                     // Reload with data if error
                     if (!errors.isEmpty()) {
-                        res.render('client/new', {
+                        res.send({
                             first_name: req.body.first_name,
                             last_name: req.body.last_name,
                             phone_number: req.body.phone_number,
@@ -102,14 +102,14 @@ exports.create_post = [
                                 notes: req.body.notes,
                             }).save(err => {
                                 if (err) return next(err);
-                                res.render('index', { msg: "Nowy klient dodany." });
+                                res.send({ msg: "Nowy klient dodany." });
                             });
                         });
                     }
 
                 }
                 else {
-                    res.render('client/new', {
+                    res.send({
                         first_name: req.body.first_name,
                         last_name: req.body.last_name,
                         phone_number: req.body.phone_number,
@@ -137,8 +137,8 @@ exports.update_get = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('client/new', { client: details });
-        // res.send({ client: details });
+        // res.render('client/new', { client: details });
+        res.send({ client: details });
         });
 }
 
@@ -165,7 +165,7 @@ exports.update_post = [
 
         // Reload with data if error
         if (!errors.isEmpty()) {
-            res.render('new_client', {
+            res.send({
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 phone_number: req.body.phone_number,

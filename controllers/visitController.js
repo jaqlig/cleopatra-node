@@ -16,8 +16,8 @@ exports.detail = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('visit/detail', { visit: details });
-        // res.send({ visit: details });
+        // res.render('visit/detail', { visit: details });
+        res.send({ visit: details });
     });
 }
 
@@ -34,8 +34,8 @@ exports.list = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('visit/list', { visit_list: allItems });
-        // res.send({ visit_list: allItems });
+        // res.render('visit/list', { visit_list: allItems });
+        res.send({ visit_list: allItems });
     });
 }
 
@@ -53,8 +53,8 @@ exports.create_get = function (req, res, next) {
         },
     }, function (err, results) {
         if (err) { return next(err); }
-        res.render('visit/new', { hairdressers: results.hairdressers, services: results.services, clients: results.clients });
-        // res.send({ hairdressers: results.hairdressers, services: results.services, clients: results.clients });
+        // res.render('visit/new', { hairdressers: results.hairdressers, services: results.services, clients: results.clients });
+        res.send({ hairdressers: results.hairdressers, services: results.services, clients: results.clients });
     });
 }
 
@@ -94,7 +94,7 @@ exports.create_post = [
                         },
                     }, function (err, results) {
                         if (err) { return next(err); }
-                        res.render('visit/new', {
+                        res.send({
                             hairdressers: results.hairdressers,
                             services: results.services,
                             clients: results.clients,
@@ -142,7 +142,7 @@ exports.create_post = [
                     });
                     
                     newVisit.save(err => {if (err) return next(err);
-                        res.render('index', { msg: "Nowa wizyta dodana." });
+                        res.send({ msg: "Nowa wizyta dodana." });
                     });                    
                 }
             });
@@ -158,8 +158,8 @@ exports.update_get = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('visit/new', { visit: details, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
-        // res.send({ visit: details });
+        // res.render('visit/new', { visit: details, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
+        res.send({ visit: details, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
         });
 }
 
@@ -184,8 +184,8 @@ exports.update_get = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('visit/new', { visit: details.visit, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
-        // res.send({ visit: details.visit, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
+        // res.render('visit/new', { visit: details.visit, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
+        res.send({ visit: details.visit, hairdressers: details.hairdressers, services: details.services, clients: details.clients });
     });
 }
 
@@ -218,7 +218,7 @@ exports.update_post = [
                 },
             }, function (err, results) {
                 if (err) { return next(err); }
-                res.render('visit/new', {
+                res.send({
                     hairdressers: results.hairdressers,
                     services: results.services,
                     clients: results.clients,
@@ -229,7 +229,6 @@ exports.update_post = [
                     notes: req.body.notes,
                     errMsg: 'Popraw podane dane.',
                     errors: errors.array() });
-                // res.send({ hairdressers: results.hairdressers, services: results.services, clients: results.clients });
             });
             return;
         }

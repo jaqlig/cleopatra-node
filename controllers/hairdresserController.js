@@ -12,8 +12,8 @@ exports.detail = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('hairdresser/detail', { hairdresser: details });
-        // res.send({ hairdresser: details });
+        // res.render('hairdresser/detail', { hairdresser: details });
+        res.send({ hairdresser: details });
     });
 }
 
@@ -30,8 +30,8 @@ exports.list = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('hairdresser/list', { hairdresser_list: allItems });
-        // res.send({ hairdresser_list: allItems });
+        // res.render('hairdresser/list', { hairdresser_list: allItems });
+        res.send({ hairdresser_list: allItems });
     });
 }
 
@@ -64,7 +64,7 @@ exports.create_post = [
 
                     // Reload with data if error
                     if (!errors.isEmpty()) {
-                        res.render('new_hairdresser', {
+                        res.send({
                             first_name: req.body.first_name,
                             last_name: req.body.last_name,
                             birth: req.body.birth,
@@ -93,14 +93,14 @@ exports.create_post = [
                                 notes: req.body.notes,
                             }).save(err => {
                                 if (err) return next(err);
-                                res.render('index', { msg: "Konto utworzone poprawnie, możesz się zalogować." });
+                                res.send({ msg: "Konto utworzone poprawnie, możesz się zalogować." });
                             });
                         });
                     }
 
                 }
                 else {
-                    res.render('hairdresser/new', {
+                    res.send({
                         first_name: req.body.first_name,
                         last_name: req.body.last_name,
                         birth: req.body.birth,
@@ -124,8 +124,8 @@ exports.update_get = function (req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('hairdresser/new', { hairdresser: details });
-        // res.send({ hairdresser: details });
+        // res.render('hairdresser/new', { hairdresser: details });
+        res.send({ hairdresser: details });
         });
 }
 
@@ -149,7 +149,7 @@ exports.update_post = [
 
         // Reload with data if error
         if (!errors.isEmpty()) {
-            res.render('new_hairdresser', {
+            res.send({
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 birth: req.body.birth,
